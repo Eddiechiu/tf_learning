@@ -15,3 +15,8 @@ git commit -m 'xxxx'
 git push tf_learning master
 git push tf_learning +master
 ```
+
+- pull update from github
+```
+git pull
+```
