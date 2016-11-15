@@ -18,5 +18,5 @@ git push tf_learning +master
 
 - pull update from github
 ```
-git pull
+git pull tf_learning master
 ```
