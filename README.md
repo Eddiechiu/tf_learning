@@ -3,9 +3,9 @@
 
 ### basic github code for myself
 git initialization (cd into the relevant folder first)
-'''
+<pre><code>
 git init
-'''
+</code><pre>
 
 mark the added or changed files and wirte a comment xxxx
 '''
