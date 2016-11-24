@@ -13,7 +13,7 @@ def content_grab(pageNum, pattern):
     return pattern.findall(data)
 
 pattern_title = re.compile(r'<span id="art-abs-title-\d{7}">(.*?)</span>')
-pattern_abstract = re.compile(r'<p>(\W)*(.*?)<a href="/document')
+pattern_abstract = re.compile(r'<p>[\s]*(.*?)[\s]*<a href="/document')
 paper_titles = []
 paper_abstracts = []
 for num in range(1,2):
@@ -31,9 +31,9 @@ i = 1
 for title in paper_titles:
     print str(i) + '. ' + title
     i = i + 1
+print '\n'
 
 i = 1
-print(paper_abstracts)
 for abstract in paper_abstracts:
     print str(i) + '. ' + abstract
     i = i + 1
