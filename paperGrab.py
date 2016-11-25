@@ -1,6 +1,8 @@
 from bs4 import BeautifulSoup
 import re
 import urllib2
+from collections import OrderedDict
+import nltk.stem
 
 class Papers():
     def __init__(self, title, abstract):
@@ -22,10 +24,23 @@ pattern_title = re.compile(r'<span id="art-abs-title-\d{7}">(.*?)</span>')
 # \s is used to match the content that have some void char(such as blankspace, \n, tab). There are lots of such void chars in html.
 pattern_abstract = re.compile(r'<p>[\s]*(.*?)[\s]*<a href="/document')
 
+# in which each element is the title of the paper
 paper_titles = []
+# in which each element is the abstract of the paper
 paper_abstracts = []
+# the list consists of the objects that contain the paper's title and its abstract  
 papers = []
-for num in range(1,20):
+# all words appear in the papers
+words = set()
+
+wordSplit = []
+
+# such as wordCount_dict = {'the': 11, 'a': 23, ... }
+wordCount_dict = {}
+wordCount_list = []
+filter = 
+
+for num in range(1,21):
     print('page ' + str(num) + ' start, wait...')
 
     for title in content_grab(pageNum=num, pattern=pattern_title):
@@ -44,8 +59,19 @@ for num in range(1,20):
 
     print('page ' + str(num) + ' finished.')
 
-i = 1
-# for paper in papers:
-#     print(str(i) + '. ' + paper )
-for i in range(len(papers)):
-    print str(i+1) + '. ' + papers[i].title + ':\nabstract: ' + papers[i].abstract + '\n'
+for paper in papers:
+    wordSplit = paper.title.split(' ')
+    for word in wordSplit:
+        if word in wordCount_dict:
+            wordCount_dict[word] += 1
+        else:
+            wordCount_dict[word] = 1
+
+    words = words.union(set(wordSplit))
+
+for item in wordCount_dict.items():
+    wordCount_list.append(item)
+
+wordCount_list = sorted(wordCount_list, key=lambda word: word[1], reverse=1)
+for i in wordCount_list:
+    print i[0] + ': ' + str(i[1])
