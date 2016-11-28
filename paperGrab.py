@@ -2,7 +2,7 @@ from bs4 import BeautifulSoup
 import re
 import urllib2
 from collections import OrderedDict
-import nltk.stem
+import nltk
 
 class Papers():
     def __init__(self, title, abstract):
@@ -38,9 +38,10 @@ wordSplit = []
 # such as wordCount_dict = {'the': 11, 'a': 23, ... }
 wordCount_dict = {}
 wordCount_list = []
-filter = 
+invalid_words = ['of', 'and', 'for', 'in', 'magnet', 'the', 'a', 'on', 'by', 'with', '<img', '<inline-formula>', 'use', '</inline-formula>',
+'analysi', 'studi', 'to', 'at', '}">', 'from', 'an', 'via']
 
-for num in range(1,21):
+for num in range(1,15):
     print('page ' + str(num) + ' start, wait...')
 
     for title in content_grab(pageNum=num, pattern=pattern_title):
@@ -62,6 +63,8 @@ for num in range(1,21):
 for paper in papers:
     wordSplit = paper.title.split(' ')
     for word in wordSplit:
+        # take the stem of each word
+        word = nltk.stem.snowball.EnglishStemmer().stem(word)
         if word in wordCount_dict:
             wordCount_dict[word] += 1
         else:
