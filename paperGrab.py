@@ -8,6 +8,26 @@ class Papers():
     def __init__(self, title, abstract):
         self.title = title
         self.abstract = abstract
+        wordCount_dict = {}
+        wordCount_list = []
+        content = title + abstract
+        wordSplit = content.split(' ')
+        for word in wordSplit:
+            # take the stem of each word
+            word = nltk.stem.snowball.EnglishStemmer().stem(word)
+            if word in invalid_words:
+                continue
+
+            if word in wordCount_dict:
+                wordCount_dict[word] += 1
+            else:
+                wordCount_dict[word] = 1
+
+        for item in wordCount_dict.items():
+            wordCount_list.append(item)
+
+        self.wordCount = sorted(wordCount_list, key=lambda word: word[1], reverse=1)
+
 
 def content_grab(pageNum, pattern):
     url = 'http://ieeexplore.ieee.org/xpl/mostRecentIssue.jsp?...' \
@@ -38,10 +58,10 @@ wordSplit = []
 # such as wordCount_dict = {'the': 11, 'a': 23, ... }
 wordCount_dict = {}
 wordCount_list = []
-invalid_words = ['of', 'and', 'for', 'in', 'magnet', 'the', 'a', 'on', 'by', 'with', '<img', '<inline-formula>', 'use', '</inline-formula>',
-'analysi', 'studi', 'to', 'at', '}">', 'from', 'an', 'via']
+invalid_words = set(['of', 'and', 'for', 'in', 'magnet', 'the', 'a', 'on', 'by', 'with', '<img', '<inline-formula>', 'use', '</inline-formula>',
+'analysi', 'studi', 'to', 'at', '}">', 'from', 'an', 'via', 'after', 'before'])
 
-for num in range(1,15):
+for num in range(1,15):  # there are 14 pages
     print('page ' + str(num) + ' start, wait...')
 
     for title in content_grab(pageNum=num, pattern=pattern_title):
@@ -65,16 +85,26 @@ for paper in papers:
     for word in wordSplit:
         # take the stem of each word
         word = nltk.stem.snowball.EnglishStemmer().stem(word)
+        if word in invalid_words:
+            continue
+
         if word in wordCount_dict:
             wordCount_dict[word] += 1
         else:
             wordCount_dict[word] = 1
 
-    words = words.union(set(wordSplit))
+#   words = words.union(set(wordSplit))
 
 for item in wordCount_dict.items():
     wordCount_list.append(item)
 
 wordCount_list = sorted(wordCount_list, key=lambda word: word[1], reverse=1)
-for i in wordCount_list:
-    print i[0] + ': ' + str(i[1])
+
+# word_number = 1
+# for i in wordCount_list:
+#     print str(word_number) + i[0] + ': ' + str(i[1])
+#     word_number += 1 
+
+word_number = 1
+for paper in papers:
+    print paper.wordCount
