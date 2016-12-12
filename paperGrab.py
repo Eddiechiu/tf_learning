@@ -1,4 +1,3 @@
-from bs4 import BeautifulSoup
 import re
 import urllib2
 from collections import OrderedDict
@@ -14,7 +13,7 @@ class Papers():
         wordSplit = content.split(' ')
         for word in wordSplit:
             # take the stem of each word
-            word = nltk.stem.snowball.EnglishStemmer().stem(word)
+            word = nltk.stem.snowball.EnglishStemmer().stem(word).strip(' .()[]:,')
             if word in invalid_words:
                 continue
 
@@ -25,7 +24,7 @@ class Papers():
 
         for item in wordCount_dict.items():
             wordCount_list.append(item)
-
+        
         self.wordCount = sorted(wordCount_list, key=lambda word: word[1], reverse=1)
 
 
@@ -58,10 +57,20 @@ wordSplit = []
 # such as wordCount_dict = {'the': 11, 'a': 23, ... }
 wordCount_dict = {}
 wordCount_list = []
-invalid_words = set(['of', 'and', 'for', 'in', 'magnet', 'the', 'a', 'on', 'by', 'with', '<img', '<inline-formula>', 'use', '</inline-formula>',
-'analysi', 'studi', 'to', 'at', '}">', 'from', 'an', 'via', 'after', 'before'])
 
-for num in range(1,15):  # there are 14 pages
+invalid_words = set([
+    'this', 'that', 'these', 'those', 'the', 'have', 'has',
+    'in', 'on', 'of', 'for', 'by', 'with', 'to', 'at', 'from', 'after', 'before', 'via', 'such', 'and', 'near', 'between',
+    'when', 'where', 'who', 'what', 'which', 'how', 'am', 'is', 'are', 'was', 'were', 'not', 'a', 'an', 'not', 'should', 'could',
+    'we', 'our', 'they', 'their',
+    'because', 'so', 'therefore',
+    'first', 'second',
+    'use', 'have',
+    '</inline-formula>', '}">', '<inline-formula>', '<img',
+    'paper', 'test',
+     ])
+
+for num in range(1,2):  # there are 14 pages
     print('page ' + str(num) + ' start, wait...')
 
     for title in content_grab(pageNum=num, pattern=pattern_title):
@@ -108,3 +117,4 @@ wordCount_list = sorted(wordCount_list, key=lambda word: word[1], reverse=1)
 word_number = 1
 for paper in papers:
     print paper.wordCount
+    print '\n'
