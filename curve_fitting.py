@@ -3,6 +3,11 @@ import random
 import matplotlib.pyplot as plt 
 from scipy.optimize import curve_fit
 
+# **** use these commands to set debug point ****
+# **** press F12(it is set to be F12 from SublimeREPL) to start it with PDB(Python DeBug) ****
+# import pdb
+# pdb.set_trace()
+
 x = np.linspace(250, 300, 100)
 noize = np.random.random([100])
 y = 1e-5 * pow((x / 300),  39) + 4e-7 * (2 * noize - 1)
