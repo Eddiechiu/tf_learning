@@ -5,8 +5,8 @@ from scipy.optimize import curve_fit
 
 # **** use these commands to set debug point ****
 # **** press F12(it is set to be F12 from SublimeREPL) to start it with PDB(Python DeBug) ****
-# import pdb
-# pdb.set_trace()
+import pdb
+
 
 x = np.linspace(250, 300, 100)
 noize = np.random.random([100])
@@ -33,7 +33,7 @@ handles, labels = ax.get_legend_handles_labels()
 ax.legend(handles[::-1], labels[::-1], loc='upper left')
 
 params_name = ['lambda', 'Ic', 'n_value', 'bias']
-
+pdb.set_trace()
 plt.show()
 for i in range(len(params_name)):
 	print(params_name[i], ' = ', params[i])
