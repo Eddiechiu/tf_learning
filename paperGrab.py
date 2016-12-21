@@ -1,35 +1,20 @@
 import re
 import urllib
-from collections import OrderedDict
+from collections import OrderedDict, Counter
 import nltk
-from collections import Counter
 import pdb
+from functools import reduce
+import pandas as pd
 
 class Paper():
     def __init__(self, title, abstract):
         self.title = title
         self.abstract = abstract
-        # wordCount_dict = {}
-        # wordCount_list = []
+
         content = title + abstract
         wordSplit = content.split(' ')
         wordSplit = [nltk.stem.snowball.EnglishStemmer().stem(word).strip(' .()[]:,') for word in wordSplit]
 
-        # # conventional way to pick up the valid word, get its stemmer and count all words
-        # for word in wordSplit:
-        #     # take the stem of each word
-        #     word = nltk.stem.snowball.EnglishStemmer().stem(word).strip(' .()[]:,')
-        #     if word in invalid_words:
-        #         continue
-        #     if word in wordCount_dict:
-        #         wordCount_dict[word] += 1
-        #     else:
-        #         wordCount_dict[word] = 1
-
-        # for item in wordCount_dict.items():
-        #     wordCount_list.append(item)
-
-        # self.wordCount = sorted(wordCount_list, key=lambda word: word[1], reverse=1)
         words = [word for word in wordSplit if word not in invalid_words]
         self.wordCount = Counter(words)
 
@@ -51,7 +36,7 @@ words = set()
 
 wordSplit = []
 
-# such as wordCount_dict = {'the': 11, 'a': 23, ... }
+# such as wordCount_dict = {'magnet': 11, 'YBCO': 23, ... }
 wordCount_dict = {}
 wordCount_list = []
 
@@ -67,45 +52,18 @@ invalid_words = set([
     'paper', 'test',
      ])
 
-#####----  start of the main process  ----####
-# download the title and abstract content and transform them into Paper class
+##### 0. Start of the main process
+##### 1. Download the title and abstract content and transform them into Paper class
 for num in range(1,2):  # there are 14 pages
     print('page ' + str(num) + ' start, wait...')
 
     paper_titles = [title for title in content_grab(pageNum=num, pattern=pattern_title)]
     paper_abstracts = [abstract for abstract in content_grab(pageNum=num, pattern=pattern_abstract)]
-
-    # combine_til_abs = zip(paper_titles, paper_abstracts)
-    # papers = dict((title, abstract) for title, abstract in combine_til_abs)
     papers = [Paper(paper_titles[i], paper_abstracts[i]) for i in range(len(paper_titles))]
 
     print('page ' + str(num) + ' finished.')
 
-for paper in papers:
-    wordSplit = paper.title.split(' ')
-    for word in wordSplit:
-        # take the stem of each word
-        word = nltk.stem.snowball.EnglishStemmer().stem(word)
-        if word in invalid_words:
-            continue
+wordCount_dataFrame = pd.DataFrame([dict(paper.wordCount) for paper in papers])
+wordCount_dict = wordCount_dataFrame.groupby().sum()
 
-        if word in wordCount_dict:
-            wordCount_dict[word] += 1
-        else:
-            wordCount_dict[word] = 1
-
-#   words = words.union(set(wordSplit))
-
-for item in wordCount_dict.items():
-    wordCount_list.append(item)
-
-wordCount_list = sorted(wordCount_list, key=lambda word: word[1], reverse=1)
-
-# word_number = 1
-# for i in wordCount_list:
-#     print str(word_number) + i[0] + ': ' + str(i[1])
-#     word_number += 1 
-
-for paper in papers:
-    print(paper.wordCount)
-    print('\n')
+print(wordCount_list)
