@@ -63,7 +63,7 @@ for num in range(1,2):  # there are 14 pages
 
     print('page ' + str(num) + ' finished.')
 
-wordCount_dataFrame = pd.DataFrame([dict(paper.wordCount) for paper in papers])
-wordCount_dict = wordCount_dataFrame.groupby().sum()
-
-print(wordCount_list)
+# store the word count in a list in which each element is saved as dataFrame 
+wordCount_dataFrame_list = [pd.DataFrame(list(dict(paper.wordCount).items()), columns=['Word', 'Count']) for paper in papers]
+pdb.set_trace()
+print(wordCount_dataFrame_list)
