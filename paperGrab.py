@@ -16,7 +16,10 @@ class Paper():
         wordSplit = [nltk.stem.snowball.EnglishStemmer().stem(word).strip(' .()[]:,') for word in wordSplit]
 
         words = [word for word in wordSplit if word not in invalid_words]
-        self.wordCount = Counter(words)
+        wordCount = dict(Counter(words))
+        keys = [item[0] for item in wordCount.items()]
+        values = [item[1] for item in wordCount.items()]
+        self.wordCount = pd.DataFrame(data=values, index=keys, columns=['count'])
 
 def content_grab(pageNum, pattern):
     url = 'http://ieeexplore.ieee.org/xpl/mostRecentIssue.jsp?...' \
@@ -63,7 +66,7 @@ for num in range(1,2):  # there are 14 pages
 
     print('page ' + str(num) + ' finished.')
 
-# store the word count in a list in which each element is saved as dataFrame 
-wordCount_dataFrame_list = [pd.DataFrame(list(dict(paper.wordCount).items()), columns=['Word', 'Count']) for paper in papers]
+# #store the word count in a list in which each element is saved as dataFrame 
+# wordCount_dataFrame_list = [pd.DataFrame(list(dict(paper.wordCount).items()), columns=['Word', 'Count']) for paper in papers]
 pdb.set_trace()
-print(wordCount_dataFrame_list)
+print(papers[0].wordCount)
