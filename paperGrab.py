@@ -34,15 +34,6 @@ pattern_title = re.compile(r'<span id="art-abs-title-\d{7}">(.*?)</span>')
 # \s is used to match the content that have some void char(such as blankspace, \n, tab). There are lots of such void chars in html.
 pattern_abstract = re.compile(r'<p>[\s]*(.*?)[\s]*<a href="/document')
 
-# all words appear in the papers
-words = set()
-
-wordSplit = []
-
-# such as wordCount_dict = {'magnet': 11, 'YBCO': 23, ... }
-wordCount_dict = {}
-wordCount_list = []
-
 invalid_words = set([
     'this', 'that', 'these', 'those', 'the', 'have', 'has', 'as',
     'in', 'on', 'of', 'for', 'by', 'with', 'to', 'at', 'from', 'after', 'before', 'via', 'such', 'and', 'near', 'between',
@@ -68,5 +59,16 @@ for num in range(1,2):  # there are 14 pages
 
 # #store the word count in a list in which each element is saved as dataFrame 
 # wordCount_dataFrame_list = [pd.DataFrame(list(dict(paper.wordCount).items()), columns=['Word', 'Count']) for paper in papers]
-pdb.set_trace()
+# pdb.set_trace()
+
+all_wordCount = pd.DataFrame()
+
+for paper in papers:
+    all_wordCount.add(all_wordCount, paper.wordCount, fill_value=0)
+
+print(all_wordCount)
 print(papers[0].wordCount)
+
+# next step:
+# 1. multiprocesses
+# 2. plot
