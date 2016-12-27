@@ -32,6 +32,17 @@ def content_grab(pageNum, pattern):
     data = data.decode('GBK')
     return pattern.findall(data)
 
+# get papers' content (title, abstract and word count, stored in Paper class) from page pageNum 
+def get_papers(pageNum):
+    start = time.clock()
+    print('page ' + str(num) + ' start, wait...')
+    papers = []
+    paper_titles = [title for title in content_grab(pageNum=pageNum, pattern=pattern_title)]
+    paper_abstracts = [abstract for abstract in content_grab(pageNum=pageNum, pattern=pattern_abstract)]
+    papers = papers + [Paper(paper_titles[i], paper_abstracts[i]) for i in range(len(paper_titles))]
+    end = time.clock()
+    print('page ' + str(num) + ' finished, %0.2f seconds used.' % (end-start))
+    return papers
 
 # patterns of matching titles and abstracts
 pattern_title = re.compile(r'<span id="art-abs-title-\d{7}">(.*?)</span>')
@@ -41,7 +52,7 @@ pattern_abstract = re.compile(r'<p>[\s]*(.*?)[\s]*<a href="/document')
 invalid_words = set([
     'this', 'that', 'these', 'those', 'the', 'have', 'has', 'as', 'it',
     'in', 'on', 'of', 'for', 'by', 'with', 'to', 'at', 'from', 'after', 'before', 'via', 'such', 'and', 'near', 'between',
-    'when', 'where', 'who', 'what', 'which', 'how', 'am', 'is', 'are', 'was', 'were', 'not', 'a', 'an', 'not', 'should', 'could',
+    'when', 'where', 'who', 'what', 'which', 'how', 'am', 'is', 'are', 'was', 'were', 'not', 'a', 'an', 'not', 'should', 'could', 'be',
     'we', 'our', 'they', 'their',
     'because', 'so', 'therefore',
     'first', 'second',
@@ -55,17 +66,11 @@ invalid_words = set([
 ##### 1. Download the title and abstract content and transform them into Paper class
 # the list contains all the papers information, in which each element is Paper object
 papers = []
-tag1 = time.clock()
-for num in range(1,15):  # there are 14 pages
-    print('page ' + str(num) + ' start, wait...')
-
-    paper_titles = [title for title in content_grab(pageNum=num, pattern=pattern_title)]
-    paper_abstracts = [abstract for abstract in content_grab(pageNum=num, pattern=pattern_abstract)]
-    papers = papers + [Paper(paper_titles[i], paper_abstracts[i]) for i in range(len(paper_titles))]
-
-    print('page ' + str(num) + ' finished.')
-tag2 = time.clock()
-print('%.03f seconds for Step_1: Data downloading and reorgnization' % (tag2-tag1))
+start = time.clock()
+for num in range(1,11):  # there are 14 pages
+    papers = papers + get_papers(num)
+end = time.clock()
+print('%.03f seconds for Step_1: Data downloading and reorgnization' % (end-start))
 
 ##### 2. count all the words in papers using reduce
 
@@ -78,8 +83,8 @@ all_wordCount = reduce(sum_data, [paper.wordCount for paper in papers])
 tag2 = time.clock()
 print('%.03f seconds for Step_2: Merge all wordCount into one DataFrame' % (tag2-tag1))
 
-print(all_wordCount.sort_values(by='count', ascending=False))
-pdb.set_trace()
+print(all_wordCount.sort_values(by='count', ascending=False)[:10])
+# pdb.set_trace()
 
 
 # next step:
