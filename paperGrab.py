@@ -7,6 +7,8 @@ from functools import reduce
 import pandas as pd
 from functools import reduce
 import time
+from multiprocessing import Pool
+
 
 # Paper Class that contains title, abstract and valid word count of each paper
 class Paper():
@@ -35,15 +37,20 @@ def content_grab(pageNum, pattern):
 # get papers' content (title, abstract and word count, stored in Paper class) from page pageNum 
 def get_papers(pageNum):
     start = time.clock()
-    print('page ' + str(num) + ' start, wait...')
+    print('page ' + str(pageNum) + ' start, wait...')
     papers = []
     paper_titles = [title for title in content_grab(pageNum=pageNum, pattern=pattern_title)]
     paper_abstracts = [abstract for abstract in content_grab(pageNum=pageNum, pattern=pattern_abstract)]
     papers = papers + [Paper(paper_titles[i], paper_abstracts[i]) for i in range(len(paper_titles))]
     end = time.clock()
-    print('page ' + str(num) + ' finished, %0.2f seconds used.' % (end-start))
+    print('page ' + str(pageNum) + ' finished, %0.2f seconds used.' % (end-start))
     return papers
 
+# very important!! if using reduce to simplify the counting process, the function pd.DataFrame.add should be redefined by pass 0 to fill_value of the function, like this:
+def sum_data(x, y):
+    return pd.DataFrame.add(x, y, fill_value=0)
+
+    
 # patterns of matching titles and abstracts
 pattern_title = re.compile(r'<span id="art-abs-title-\d{7}">(.*?)</span>')
 # \s is used to match the content that have some void char(such as blankspace, \n, tab). There are lots of such void chars in html.
@@ -65,26 +72,27 @@ invalid_words = set([
 ##### 0. Start of the main process
 ##### 1. Download the title and abstract content and transform them into Paper class
 # the list contains all the papers information, in which each element is Paper object
-papers = []
-start = time.clock()
-for num in range(1,11):  # there are 14 pages
-    papers = papers + get_papers(num)
-end = time.clock()
-print('%.03f seconds for Step_1: Data downloading and reorgnization' % (end-start))
+if __name__=='__main__':
+    p = Pool()
+    pool_results = []
+    start = time.clock()
 
-##### 2. count all the words in papers using reduce
+    for i in range(1, 5):
+        pool_results.append(p.apply_async(get_papers, args=(i,)))
+    
+    papers = [res.get() for res in pool_results]
 
-# very important!! if using reduce to simplify the counting process, the function pd.DataFrame.add should be redefined by pass 0 to fill_value of the function, like this:
-def sum_data(x, y):
-    return pd.DataFrame.add(x, y, fill_value=0)
+    end = time.clock()
+    print('%.03f seconds for Step_1: Data downloading and reorgnization' % (end-start))
+    pdb.set_trace()
+    ##### 2. count all the words in papers using reduce
+    tag1 = time.clock()
+    all_wordCount = reduce(sum_data, [paper.wordCount for paper in papers])
+    tag2 = time.clock()
+    print('%.03f seconds for Step_2: Merge all wordCount into one DataFrame' % (tag2-tag1))
 
-tag1 = time.clock()
-all_wordCount = reduce(sum_data, [paper.wordCount for paper in papers])
-tag2 = time.clock()
-print('%.03f seconds for Step_2: Merge all wordCount into one DataFrame' % (tag2-tag1))
-
-print(all_wordCount.sort_values(by='count', ascending=False)[:10])
-# pdb.set_trace()
+    print(all_wordCount.sort_values(by='count', ascending=False)[:10])
+    # pdb.set_trace()
 
 
 # next step:
