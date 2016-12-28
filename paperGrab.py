@@ -74,22 +74,20 @@ invalid_words = set([
 # the list contains all the papers information, in which each element is Paper object
 if __name__=='__main__':
     p = Pool()
-    pool_results = []
+    papers = []
     start = time.clock()
-
-    for i in range(1, 5):
-        pool_results.append(p.apply_async(get_papers, args=(i,)))
     
-    papers = [res.get() for res in pool_results]
+    for i in range(1, 5):
+        papers.extend(p.apply_async(get_papers, args=(i,)).get())
 
     end = time.clock()
     print('%.03f seconds for Step_1: Data downloading and reorgnization' % (end-start))
-    pdb.set_trace()
+
     ##### 2. count all the words in papers using reduce
-    tag1 = time.clock()
+    start = time.clock()
     all_wordCount = reduce(sum_data, [paper.wordCount for paper in papers])
-    tag2 = time.clock()
-    print('%.03f seconds for Step_2: Merge all wordCount into one DataFrame' % (tag2-tag1))
+    end = time.clock()
+    print('%.03f seconds for Step_2: Merge all wordCount into one DataFrame' % (end-start))
 
     print(all_wordCount.sort_values(by='count', ascending=False)[:10])
     # pdb.set_trace()
