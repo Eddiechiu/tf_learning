@@ -38,16 +38,15 @@ def content_grab(pageNum, pattern):
 def get_papers(pageNum):
     start = time.clock()
     print('page ' + str(pageNum) + ' start, wait...')
-    papers = []
     paper_titles = [title for title in content_grab(pageNum=pageNum, pattern=pattern_title)]
     paper_abstracts = [abstract for abstract in content_grab(pageNum=pageNum, pattern=pattern_abstract)]
-    papers = papers + [Paper(paper_titles[i], paper_abstracts[i]) for i in range(len(paper_titles))]
+    papers = [Paper(paper_titles[i], paper_abstracts[i]) for i in range(len(paper_titles))]
     end = time.clock()
     print('page ' + str(pageNum) + ' finished, %0.2f seconds used.' % (end-start))
     return papers
 
 # very important!! if using reduce to simplify the counting process, the function pd.DataFrame.add should be redefined by pass 0 to fill_value of the function, like this:
-def sum_data(x, y):
+def data_Frame_sum(x, y):
     return pd.DataFrame.add(x, y, fill_value=0)
 
     
@@ -74,18 +73,20 @@ invalid_words = set([
 # the list contains all the papers information, in which each element is Paper object
 if __name__=='__main__':
     p = Pool()
-    papers = []
     start = time.clock()
-    
+    papers = []
     for i in range(1, 5):
-        papers.extend(p.apply_async(get_papers, args=(i,)).get())
-
+        papers.append(p.apply_async(get_papers, args=(i,)))
+    p.close()
+    p.join()
     end = time.clock()
     print('%.03f seconds for Step_1: Data downloading and reorgnization' % (end-start))
-
-    ##### 2. count all the words in papers using reduce
+    # pdb.set_trace()
+    ##### 2. count all the words in papers_global using reduce
     start = time.clock()
-    all_wordCount = reduce(sum_data, [paper.wordCount for paper in papers])
+    papers = reduce(lambda x, y: x + y, [paper.get() for paper in papers])
+
+    all_wordCount = reduce(data_Frame_sum, [paper.wordCount for paper in papers])
     end = time.clock()
     print('%.03f seconds for Step_2: Merge all wordCount into one DataFrame' % (end-start))
 
