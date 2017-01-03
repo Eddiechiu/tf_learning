@@ -1,14 +1,14 @@
 import re
 import urllib
-from collections import OrderedDict, Counter
 import nltk
 import pdb
 from functools import reduce
+import numpy as np
+import matplotlib.pyplot as plt
 import pandas as pd
-from functools import reduce
 import time
 from multiprocessing import Pool
-
+from collections import Counter
 
 # Paper Class that contains title, abstract and valid word count of each paper
 class Paper():
@@ -49,7 +49,18 @@ def get_papers(pageNum):
 def data_Frame_sum(x, y):
     return pd.DataFrame.add(x, y, fill_value=0)
 
-    
+def topWords_plot(all_wordCount, top):
+    result = all_wordCount.sort_values(by='count', ascending=False)[:top]
+    words = tuple(result.index)
+    fre = tuple(result.values.flatten())
+    y_pos = np.arange(len(words))   
+
+    plt.barh(y_pos, fre, align='center', alpha=0.4)
+    plt.yticks(y_pos, words)
+    plt.xlabel('Frequencies')
+    plt.title('Wrod Frequencies in Papers')
+    plt.show()
+
 # patterns of matching titles and abstracts
 pattern_title = re.compile(r'<span id="art-abs-title-\d{7}">(.*?)</span>')
 # \s is used to match the content that have some void char(such as blankspace, \n, tab). There are lots of such void chars in html.
@@ -58,14 +69,15 @@ pattern_abstract = re.compile(r'<p>[\s]*(.*?)[\s]*<a href="/document')
 invalid_words = set([
     'this', 'that', 'these', 'those', 'the', 'have', 'has', 'as', 'it',
     'in', 'on', 'of', 'for', 'by', 'with', 'to', 'at', 'from', 'after', 'before', 'via', 'such', 'and', 'near', 'between',
-    'when', 'where', 'who', 'what', 'which', 'how', 'am', 'is', 'are', 'was', 'were', 'not', 'a', 'an', 'not', 'should', 'could', 'be',
+    'when', 'where', 'who', 'what', 'which', 'how', 'am', 'is', 'are', 'was', 'were', 'not', 'a', 'an', 'not', 'should', 'could', 'been',
     'we', 'our', 'they', 'their',
     'because', 'so', 'therefore',
     'first', 'second',
     'use', 'have',
     '</inline-formula>', '}">', '<inline-formula>', '<img',
     'paper', 'test',
-    'one', 'two', 'three', 'four', 'five', 'six', 'be'
+    'one', 'two', 'three', 'four', 'five', 'six', 'be',
+    'system', 'investig', 'develop', 'design',
      ])
 
 ##### 0. Start of the main process
@@ -75,7 +87,7 @@ if __name__=='__main__':
     p = Pool()
     start = time.clock()
     papers = []
-    for i in range(1, 5):
+    for i in range(1, 15):
         papers.append(p.apply_async(get_papers, args=(i,)))
     p.close()
     p.join()
@@ -90,11 +102,11 @@ if __name__=='__main__':
     end = time.clock()
     print('%.03f seconds for Step_2: Merge all wordCount into one DataFrame' % (end-start))
 
-    print(all_wordCount.sort_values(by='count', ascending=False)[:10])
+    topWords_plot(all_wordCount, 10)
     # pdb.set_trace()
+
 
 
 # next step:
 # 0. how to get the whole abstract, rather than part of it
-# 1. multiprocesses
 # 2. pretty plot
