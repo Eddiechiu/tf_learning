@@ -25,12 +25,11 @@ records = [json.loads(line) for line in open(path)]
 time_zones = [rec['tz'] for rec in records if 'tz' in rec]
 # counts = get_counts(time_zones)
 counts = Counter(time_zones) # much faster way is to use collections.Counter
-# frame = DataFrame(records)
+frame = DataFrame(records)
 
-# clean_tz = frame['tz'].fillna('Missing')
-# clean_tz[clean_tz == ''] = 'Unknown'
-# tz_counts = clean_tz.value_counts()
+clean_tz = frame['tz'].fillna('Missing')
+clean_tz[clean_tz == ''] = 'Unknown'
+tz_counts = clean_tz.value_counts()
 
-# tz_counts[:10].plot(kind='barh', rot=0)
-# plt.show()
-print(counts)
+tz_counts[:10].plot(kind='barh', rot=0)
+plt.show()

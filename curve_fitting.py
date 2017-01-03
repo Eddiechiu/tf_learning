@@ -33,7 +33,7 @@ handles, labels = ax.get_legend_handles_labels()
 ax.legend(handles[::-1], labels[::-1], loc='upper left')
 
 params_name = ['lambda', 'Ic', 'n_value', 'bias']
-pdb.set_trace()
+# pdb.set_trace()
 plt.show()
 for i in range(len(params_name)):
 	print(params_name[i], ' = ', params[i])
