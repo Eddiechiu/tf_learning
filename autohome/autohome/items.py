@@ -9,4 +9,5 @@ import scrapy
 
 
 class AutohomeItem(scrapy.Item):
-    content = scrapy.Field()
+    car_name = scrapy.Field()
+    car_club_url = scrapy.Field()
