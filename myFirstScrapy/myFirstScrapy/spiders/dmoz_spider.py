@@ -1,5 +1,8 @@
 import scrapy
 
+# 在shell中获取网站源码的response的命令，输入：scrapy shell "http://....."
+# 在shell中启动爬虫：scrapy crawl xxx(spider的name)
+
 class DomzSpider(scrapy.spiders.Spider):
 	name = 'dmoz'
 	allowed_domains = ['dmoz.org']

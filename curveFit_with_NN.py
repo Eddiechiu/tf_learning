@@ -47,7 +47,7 @@ with tf.name_scope('Train'):
 
 init = tf.initialize_all_variables()
 
-print 'training started'
+print('training started')
 
 with tf.Session() as sess:
 	merged = tf.merge_all_summaries()
@@ -86,4 +86,4 @@ with tf.Session() as sess:
 			line = ax.plot(x_data, prediction_value, 'r-', lw=5)
 			plt.pause(0.1)
 
-print 'training finished'
+print('training finished')
