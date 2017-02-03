@@ -14,7 +14,6 @@ BOT_NAME = 'autohome'
 SPIDER_MODULES = ['autohome.spiders']
 NEWSPIDER_MODULE = 'autohome.spiders'
 
-
 # Crawl responsibly by identifying yourself (and your website) on the user-agent
 #USER_AGENT = 'autohome (+http://www.yourdomain.com)'
 

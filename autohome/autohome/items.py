@@ -11,3 +11,4 @@ import scrapy
 class AutohomeItem(scrapy.Item):
     car_name = scrapy.Field()
     car_club_url = scrapy.Field()
+    num_posts = scrapy.Field()
