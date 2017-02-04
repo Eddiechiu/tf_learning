@@ -29,7 +29,9 @@ class AutohomeSpider(scrapy.spiders.Spider):
 
 	def parse_single_club(self, response):
 		item = AutohomeItem()
-		# note .extract() return a list, not a string 
+		# note .extract() return a list, not a string
+		item['car_name'] = response.xpath('//div[@class="brand-name"]/a').extract()
+
 		content = response.xpath('//div[@class="pagearea"]/div[@class="fl"]/span').extract()[0]
 		item['num_posts'] = re.findall(r'<span>(.*?)</span>', content)
 		yield item
