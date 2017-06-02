@@ -12,7 +12,10 @@ data_centralized = data - meanVals
 covMat = np.cov(data_centralized, rowvar=0)
 eigVals, eigVects = np.linalg.eig(np.mat(covMat))
 eigValInd = np.argsort(eigVals)
-eigValInd_chosen = eigValInd[: -(1+1) : -1]
+
+# 注意list切片，为三个参数，起点、终点、步长。这里省略了起点，但因为步长是-1（从后往前），仅设置终点，则起点默认是-1
+eigValInd_chosen = eigValInd[: -(1+1) : -1] 
+
 redEigVects = eigVects[:, eigValInd_chosen]
 lowDDataMat = data_centralized * redEigVects
 reconMat = (lowDDataMat * redEigVects.T) + meanVals
