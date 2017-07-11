@@ -7,8 +7,9 @@
 
 import scrapy
 
-
+# 保存所爬取数据的容器，扩展了scrapy的Item类
 class AutohomeItem(scrapy.Item):
-    car_name = scrapy.Field()
-    car_club_url = scrapy.Field()
-    num_posts = scrapy.Field()
+    size = scrapy.Field()
+    name = scrapy.Field()
+    detail = scrapy.Field()
+    score = scrapy.Field()

@@ -43,6 +43,7 @@ def standEst(dataMat, user, simMeas, item):
             similarity = simMeas(dataMat[overlap, item], dataMat[overlap, j])
         simTotal += similarity
         # ratSimTotal为了后面计算食物评分的估计值
+        # 在这里，userRating越高，ratSimTotal就越高，评分也越高
         ratSimTotal += similarity * userRating 
     if simTotal == 0:
         return 0
@@ -58,6 +59,7 @@ def recommend(dataMat, user, N=3, simMeas=cosSim, estMethod=standEst):
     for item in unratedItem:
         estimatedScore = standEst(dataMat, user, simMeas, item)
         itemScores.append((item, estimatedScore))
+    # 对list进行排序，有两种方法，一是list_1.sort(), 或者使用sorted(list_2)
     return sorted(itemScores, key=lambda x: x[1], reverse=True)[:N]
 
-print(recommend(dataMat, 4, N=1))
+print(recommend(dataMat, 2, N=2))
