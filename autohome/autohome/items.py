@@ -11,5 +11,5 @@ import scrapy
 class AutohomeItem(scrapy.Item):
     size = scrapy.Field()
     name = scrapy.Field()
-    detail = scrapy.Field()
+    details = scrapy.Field()
     score = scrapy.Field()

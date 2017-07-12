@@ -1,12 +1,15 @@
 import scrapy
 from autohome.items import AutohomeItem
 import re
+# import sys
 
+# reload(sys)
+# sys.setdefaultencoding('utf-8')
 
 class AutohomeSpider(scrapy.spiders.Spider):
 	# name属性用于在cmd窗口启动爬虫，每个爬虫的name必须唯一，如：scrapy crawl autohome
 	name = 'autohome'
-	allowed_domains = ['car.autohome.com.cn']
+	allowed_domains = ['https://car.autohome.com.cn']
 	start_urls = [
 		'http://car.autohome.com.cn/price/brand-70.html'
 	]
@@ -24,15 +27,18 @@ class AutohomeSpider(scrapy.spiders.Spider):
 			url_path = 'http://car.autohome.com.cn' + href
 			# post_path = 'http://club.autohome.com.cn' + item['car_club_url'] 
 			# print(post_path)
-			yield scrapy.Request(url_path, callback=self.car_list)
+
+			# 这里dont_filter=True即不是用allowed_domins作为过滤器
+			yield scrapy.Request(url_path, callback=self.car_list, dont_filter=True)
 		# item = AutohomeItem()
 		# item['num_posts'] = response.xpath('//div[@class="pagearea"]/div[@class="fl"]/span').extract()
 		# yield item
 
 	def car_list(self, response):
-		for href in response.xpath('//div[@class="interval01-list-cars-infor"]/p/a/@href').extract()[0]:
-			# 这一步会返回两种href，其中一种是“惠民补贴”，需要筛出
-			yield scrapy.Request('http://' + href, callback=self.car_infor_collect)
+		for href in response.xpath('//div[@class="interval01-list-cars-infor"]/p/a/@href').extract():
+			# 这一步会返回两种href，其中一种是“惠民补贴”，需要筛除
+			if href[-6] != '6':
+				yield scrapy.Request(href, callback=self.car_infor_collect, dont_filter=True)
 		#item = AutohomeItem()
 		#  # note .extract() return a list, not a string
 		#item['car_name'] = response.xpath('//div[@class="brand-name"]/a').extract()
@@ -49,9 +55,13 @@ class AutohomeSpider(scrapy.spiders.Spider):
 		item = AutohomeItem()
 
 		data_0 = response.xpath('//div[@class="breadnav fn-left"]/a/text()').extract()
-		item['size'] = data_0[1]
-		item['name'] = data_0[2]
-		item['details'] = data_0[3]
+		if data_0:
+			item['size'] = data_0[1]
+			item['name'] = data_0[2]
+			item['details'] = data_0[3]
 
-		item['score'] = response.xpath('//a[@class="fn-fontsize14 font-bold"]/text()').extract()[0]
+		data_1 = response.xpath('//a[@class="fn-fontsize14 font-bold"]/text()').extract()
+		if data_1:
+			item['score'] = data_1[0]
+
 		yield item
