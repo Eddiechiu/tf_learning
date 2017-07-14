@@ -1,4 +1,4 @@
-## Some practise of tensorflow programs
+## basic practise of tensorflow and scrapy
 
 
 ### basic github code for myself
