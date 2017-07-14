@@ -1,7 +1,6 @@
 ## basic practise of tensorflow and scrapy
-
-
-### basic github code for myself
+---
+### github
 - git initialization (cd into the relevant folder first)
 ```
 git init
@@ -20,7 +19,9 @@ git push tf_learning +master
 ```
 git pull tf_learning master
 ```
-- start tensorflow in anaconda: activate the env for tensorflow and start sublime text3 in this env
+---
+### ubuntu terminal
+- start tensorflow in anaconda: activate the envirnoment for tensorflow and start sublime text3 in this envirnoment
 ```
 $ activate source tensorflow
 $ subl
