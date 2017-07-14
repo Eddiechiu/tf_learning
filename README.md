@@ -20,3 +20,8 @@ git push tf_learning +master
 ```
 git pull tf_learning master
 ```
+- start tensorflow in anaconda: activate the env for tensorflow and start sublime text3 in this env
+'''
+$ activate source tensorflow
+$ subl
+'''
