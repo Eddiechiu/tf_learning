@@ -44,7 +44,7 @@ PROXIES = [
 ]
 
 # Obey robots.txt rules
-ROBOTSTXT_OBEY = True
+ROBOTSTXT_OBEY = False
 
 # Configure maximum concurrent requests performed by Scrapy (default: 16)
 #CONCURRENT_REQUESTS = 32
@@ -52,10 +52,10 @@ ROBOTSTXT_OBEY = True
 # Configure a delay for requests for the same website (default: 0)
 # See http://scrapy.readthedocs.org/en/latest/topics/settings.html#download-delay
 # See also autothrottle settings and docs
-DOWNLOAD_DELAY = 0
+DOWNLOAD_DELAY = 1
 # The download delay setting will honor only one of:
 #CONCURRENT_REQUESTS_PER_DOMAIN = 16
-#CONCURRENT_REQUESTS_PER_IP = 16
+CONCURRENT_REQUESTS_PER_IP = 1
 
 # Disable cookies (enabled by default)
 COOKIES_ENABLED = False
@@ -117,3 +117,17 @@ COOKIES_ENABLED = False
 # 当出现DEBUG: Ignoring response <NNN http://www.xxx.com/>: HTTP status code is not handled or not allowed时
 # 加入如下这一句，可以是spyder中的函数相应这些网页
 HTTPERROR_ALLOWED_CODES = [400]
+
+# FEED_EXPORTERS = {
+# 	'csv': 'autohome.spiders.csv_item_exporter.MyCsvItemExporter',
+# }
+
+# FIELDS_TO_EXPORT = [
+# 	'name',
+# 	'size',
+# 	'details',
+# 	'score',
+# 	'user_num',
+# ]
+
+# CSV_DELIMITER = '\t'

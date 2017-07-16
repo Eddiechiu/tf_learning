@@ -13,3 +13,4 @@ class AutohomeItem(scrapy.Item):
     name = scrapy.Field()
     details = scrapy.Field()
     score = scrapy.Field()
+    user_num = scrapy.Field()

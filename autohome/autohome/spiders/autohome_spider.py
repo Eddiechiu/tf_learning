@@ -1,10 +1,7 @@
 import scrapy
 from autohome.items import AutohomeItem
 import re
-# import sys
 
-# reload(sys)
-# sys.setdefaultencoding('utf-8')
 
 class AutohomeSpider(scrapy.spiders.Spider):
 	# name属性用于在cmd窗口启动爬虫，每个爬虫的name必须唯一，如：scrapy crawl autohome
@@ -56,12 +53,18 @@ class AutohomeSpider(scrapy.spiders.Spider):
 
 		data_0 = response.xpath('//div[@class="breadnav fn-left"]/a/text()').extract()
 		if data_0:
-			item['size'] = data_0[1]
-			item['name'] = data_0[2]
-			item['details'] = data_0[3]
+			# utf-8 编码在json中可能会出错，所以使用csv输出
+			item['name'] = data_0[2].encode('utf-8')
+			item['size'] = data_0[1].encode('utf-8')
+			item['details'] = data_0[3].encode('utf-8')
 
 		data_1 = response.xpath('//a[@class="fn-fontsize14 font-bold"]/text()').extract()
 		if data_1:
-			item['score'] = data_1[0]
+			item['score'] = data_1[0].encode('utf-8')
+		
+		data_2 = response.xpath('//ul[@class="fn-clear"]/li[1]/a[3]/text()').extract()
+		if data_2:
+			item['user_num'] = re.findall('(\d+)', data_2[0])
 
-		yield item
+		if item:
+			yield item
