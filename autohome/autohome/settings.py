@@ -118,16 +118,16 @@ COOKIES_ENABLED = False
 # 加入如下这一句，可以是spyder中的函数相应这些网页
 HTTPERROR_ALLOWED_CODES = [400]
 
-# FEED_EXPORTERS = {
-# 	'csv': 'autohome.spiders.csv_item_exporter.MyCsvItemExporter',
-# }
+FEED_EXPORTERS = {
+	'csv': 'autohome.spiders.csv_item_exporter.MyCsvItemExporter',
+}
 
-# FIELDS_TO_EXPORT = [
-# 	'name',
-# 	'size',
-# 	'details',
-# 	'score',
-# 	'user_num',
-# ]
+FIELDS_TO_EXPORT = [
+	'name',
+	'size',
+	'details',
+	'score',
+	'user_num',
+]
 
-# CSV_DELIMITER = '\t'
+CSV_DELIMITER = ','

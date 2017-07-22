@@ -7,4 +7,4 @@ class MyCsvItemExporter(CsvItemExporter):
 		fields_to_export = settings.get('FIELDS_TO_EXPORT', [])
 		if fields_to_export:
 			kwargs['fields_to_export'] = fields_to_export
-		super(MyProjectCsvItemExporter, self).__init__(*args, **kwargs)
+		super(MyCsvItemExporter, self).__init__(*args, **kwargs)
