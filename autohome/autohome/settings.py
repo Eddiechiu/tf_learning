@@ -88,10 +88,11 @@ COOKIES_ENABLED = False
 #}
 
 # Configure item pipelines
-# See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
-#    'autohome.pipelines.SomePipeline': 300,
-#}
+# # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
+# ITEM_PIPELINES = {
+#    'autohome.pipelines.ScrapyPipeline': 300,
+#    'autohome.pipelines.JsonPipeline': 300,
+# }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See http://doc.scrapy.org/en/latest/topics/autothrottle.html
@@ -130,4 +131,10 @@ FIELDS_TO_EXPORT = [
 	'user_num',
 ]
 
-CSV_DELIMITER = ','
+# CSV_DELIMITER = ','
+
+# MYSQL_HOST = 'Eddiechiu'
+# MYSQL_DBNAME = 'autohome'
+# MYSQL_USER = 'root'
+# MYSQL_PORT = 3306
+# MYSQL_PASSWD = 'root'

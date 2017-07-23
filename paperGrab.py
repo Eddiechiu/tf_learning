@@ -102,7 +102,7 @@ if __name__=='__main__':
     end = time.clock()
     print('%.03f seconds for Step_2: Merge all wordCount into one DataFrame' % (end-start))
 
-    topWords_plot(all_wordCount, 10)
+    topWords_plot(all_wordCount, 30)
     # pdb.set_trace()
 
 
