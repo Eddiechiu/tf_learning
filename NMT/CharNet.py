@@ -25,13 +25,14 @@ class CharNet():
         self.loss = self.build_loss(logits, num_classes)
         self.optimizer = self.build_optimizer(learning_rate)
         
-        
+    @staticmethod
     def build_inputs(batch_size, seq_length):
         inputs = tf.placeholder(dtype=tf.int32, shape=(batch_size, seq_length), name='inputs')
         targets = tf.placeholder(dtype=tf.int32, shape=(batch_size, seq_length), name='targets')
         return inputs, targets
         
     # generate multilayer RNN cell (standard method in tensorflow)
+    @staticmethod
     def lstm_gen(lstm_size, keep_prob):
         # BasicRNNCell's state and output are the same
         # BasicLSTMCell's state contains c and h. also, output is the same as h
@@ -49,7 +50,8 @@ class CharNet():
         x_one_hot = tf.one_hot(self.inputs, num_classes)
         outputs, final_state = tf.nn.dynamic_rnn(cell, x_one_hot, initial_state=self.initial_state)
         return outputs, final_state
-    
+        
+    @staticmethod
     def build_output(batch_size, seq_length, lstm_size, outputs, num_classes):
         seq_output = tf.reshape(outputs, (batch_size*seq_length, lstm_size))
         x = tf.reshape(seq_output, [-1, lstm_size])
