@@ -1,0 +1,2 @@
+model_checkpoint_path: "i10120_l128.ckpt"
+all_model_checkpoint_paths: "i10120_l128.ckpt"

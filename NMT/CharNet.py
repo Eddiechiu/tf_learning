@@ -21,7 +21,7 @@ class CharNet():
         self.inputs, self.targets = self.build_inputs(batch_size, seq_length)
         cell, self.initial_state = self.build_LSTMs(batch_size, lstm_size, num_layers, keep_prob)
         outputs, self.final_state = self.run_LSTMs(num_classes, cell)
-        logits, softmax_out = self.build_output(batch_size, seq_length, lstm_size, outputs, num_classes)
+        logits, self.softmax_out = self.build_output(batch_size, seq_length, lstm_size, outputs, num_classes)
         self.loss = self.build_loss(logits, num_classes)
         self.optimizer = self.build_optimizer(learning_rate)
         

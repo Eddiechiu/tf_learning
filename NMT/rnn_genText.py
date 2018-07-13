@@ -51,9 +51,9 @@ learning_rate = 0.001
 
 charNet = CharNet(batch_size=num_seqs, seq_length=num_steps,
                   lstm_size=lstm_size, keep_prob=0.5, num_classes=num_classes,
-                  num_layers=2, learning_rate=0.001, training=True)
+                  num_layers=3, learning_rate=0.001, training=True)
 
-epochs = 20
+epochs = 10
 save_every_n = 200
 
 saver = tf.train.Saver(max_to_keep=100)
