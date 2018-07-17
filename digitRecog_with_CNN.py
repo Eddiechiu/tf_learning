@@ -1,3 +1,4 @@
+from __future__ import print_function
 import tensorflow.examples.tutorials.mnist.input_data as input_data
 import tensorflow as tf
 
@@ -48,7 +49,7 @@ cross_entropy = tf.reduce_mean(-y_real * tf.log(pred))
 train = tf.train.AdamOptimizer(1e-4).minimize(cross_entropy)
 
 with tf.Session() as sess:
-	sess.run(tf.initialize_all_variables())
+	sess.run(tf.global_variables_initializer())
 
 	for i in range(3000):
 		batch_xs, batch_ys = mnist.train.next_batch(100)
@@ -58,6 +59,7 @@ with tf.Session() as sess:
 			# argmax returns the index of the max value along Direction=1
 			# function 'cast' turns correction_prediction from int to tf.float32 
 			accuracy = tf.reduce_mean(tf.cast(tf.equal(tf.argmax(y_real, 1), tf.argmax(pred, 1)), tf.float32))
-			print 'step: ', i+1, '  accuracy: ', sess.run(accuracy, feed_dict={x: mnist.test.images, y_real: mnist.test.labels, keep_prob: 1})
+			print('step: ', i+1, '  accuracy: ', sess.run(accuracy, feed_dict={x: mnist.test.images, y_real: mnist.test.labels, keep_prob: 1}))
 
 # time consumed:686 s, accuracy: ~97.2%
+        
