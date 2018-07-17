@@ -19,16 +19,21 @@ def bias_init(shape):
 	return tf.Variable(init)
 
 def conv2d(x, W):
+    # input x must be a 4 dimention Tensor with [batch, in_height, in_width, in_channel]
+    # filter W (convolution kernel) shape is [filter_height, filter_height, in_channel, out_channel]
 	# strides=[1, x_movement, y_movement, 1], in which strides[0] and strides[3] must be equal to 1.
+    # padding='VALID' will drop the extra element
+    # while, padding='SAME' will fill up with zeros that the shape of input and output will be the same
 	return tf.nn.conv2d(x, W, strides=[1,1,1,1], padding='SAME')
 
 def max_pool_2x2(x):
 	return tf.nn.max_pool(x, ksize=[1,2,2,1], strides=[1,2,2,1], padding='SAME')
 
-W_conv1 = weight_init([5,5,1,8]) # patch 5x5, input size 1, output size 32 (which means we use 32 maps to convolute the original picture).
+# patch 5x5, input size 1, output size 8 (which means we use 8 maps to convolute the original picture).
+W_conv1 = weight_init([5,5,1,8])
 b_conv1 = bias_init([8])
-h_conv1 = tf.nn.relu(conv2d(x_image, W_conv1) + b_conv1) # size is 28x28x32
-h_pool1 = max_pool_2x2(h_conv1)  # size is 14x14x32
+h_conv1 = tf.nn.relu(conv2d(x_image, W_conv1) + b_conv1) # size is 28x28x8
+h_pool1 = max_pool_2x2(h_conv1)  # size is 14x14x8
 
 W_conv2 = weight_init([5,5,8,32])
 b_conv2 = bias_init([32])
